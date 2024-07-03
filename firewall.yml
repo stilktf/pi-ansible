@@ -1,0 +1,14 @@
+- name: Firewall configuration using ufw
+  hosts: myhosts
+  become: true # Use this to specify you want to be root during the playbook!!!!
+  tasks:
+    - name: Accept OpenSSH-connections obviously duh
+      community.general.ufw:
+        rule: allow
+        name: OpenSSH
+    - name: Deny specific Chinese IP addresses from accessing server
+      community.general.ufw:
+        rule: deny
+        src: '{{ item }}'
+        comment: 'Chinese/Alibaba IP address'
+      loop: "{{ lookup('file', 'extra/banned_ip_ranges_cn.txt').splitlines() }}"

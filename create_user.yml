@@ -1,0 +1,39 @@
+- name: Create user accounts
+  hosts: myhosts
+  become: true
+  vars_prompt:
+    - name: ssh_pubkey_location
+      prompt: Location to ssh pubkey
+      private: false
+    - name: personal_account_name
+      prompt: Name for your personal account
+      private: true
+
+  tasks:
+    - name: Create ansible user account
+      ansible.builtin.user:
+        name: ansible-runner
+        comment: Runner account for Ansible playbooks.
+        groups: sudo,docker
+        shell: /bin/bash
+    - name: Add pubkey to authorized keys (ansible-runner)
+      ansible.posix.authorized_key:
+        user: ansible-runner
+        state: present
+        key: "{{ item }}"
+      with_file:
+        - "{{ ssh_pubkey_location }}"
+    - name: Create my user account
+      ansible.builtin.user:
+        name: "{{ personal_account_name }}"
+        comment: "Personal account belonging to {{ personal_account_name }}."
+        groups: sudo,docker
+        shell: /bin/bash
+        create_home: true
+    - name: "Add pubkey to authorized keys ({{ personal_account_name }})"
+      ansible.posix.authorized_key:
+        user: "{{ personal_account_name }}"
+        state: present
+        key: "{{ item }}"
+      with_file:
+        - "{{ ssh_pubkey_location }}"
