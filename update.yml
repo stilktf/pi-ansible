@@ -10,3 +10,11 @@
       ansible.builtin.apt:
         state: latest
         name: "*"
+    - name: Check if reboot is required
+      register: reboot_required_file
+      stat: path=/var/run/reboot-required get_checksum=false
+    - name: Remind user if reboot is required
+      ansible.builtin.debug:
+        msg: Reboot might be required for update (kernel, etc)
+      when: reboot_required_file.stat.exists
+

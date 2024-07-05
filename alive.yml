@@ -1,0 +1,6 @@
+- name: Are systems alive?
+  hosts: myhosts
+
+  tasks:
+    - name: Check
+      ansible.builtin.ping:
