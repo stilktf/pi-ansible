@@ -1,0 +1,23 @@
+- name: Mount NAS to system
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+  tasks:
+    - name: Install cifs-utils
+      ansible.builtin.apt:
+        name: cifs-utils
+    - name: Create credentials file for mount
+      copy:
+        dest: "/etc/smbmount"
+        content: |
+          username={{ smb_username }}
+          password={{ smb_password }}
+
+    - name: Mount drive permanently
+      ansible.posix.mount:
+        src: //192.168.86.128/home
+        path: /mnt/synology
+        opts: "rw,vers=3,file_mode=775,dir_mode=775,mfsymlinks,credentials=/etc/smbmount"
+        fstype: cifs
+        state: mounted

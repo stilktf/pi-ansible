@@ -1,0 +1,20 @@
+- name: Set up web server (Caddy)
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    # TODO: Set up xcaddy/caddy build for the other plugins I have installed.
+    - name: Copy configuration file for Caddy
+      ansible.builtin.template:
+        src: extra/Caddyfile.j2
+        dest: /etc/caddy/Caddyfile
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload Caddy config
+      ansible.builtin.command: /usr/bin/caddy reload --config /etc/caddy/Caddyfile
+      register: caddy_reload_output
+      changed_when: caddy_reload_output.rc != 0

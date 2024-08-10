@@ -1,0 +1,32 @@
+- name: Setup Calibre server using Docker
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+  tasks:
+    - name: Install prerequisite Python packages for the Ansible module for Docker
+      ansible.builtin.apt:
+        name: python3-requests
+    - name: Check if Docker is installed on system
+      ansible.builtin.command: docker --version
+      register: docker_valid
+      changed_when: docker_valid.rc != 0
+    - name: Setup Calibre container
+      community.docker.docker_container:
+        name: calibre
+        image: lscr.io/linuxserver/calibre-web
+        volumes:
+          - /opt/calibre-web/data/:/config
+          - /mnt/synology/Calibre Library:/books # get books from nas
+        restart_policy: unless-stopped
+        ports:
+          - "8083:8083"
+        env:
+          TZ: "Europe/Oslo"
+          PUID: "1000"
+          PGID: "1000"
+    - name: Check if NAS mount exists
+      stat:
+        path: /mnt/synology
+      register: nas_mount
+          

@@ -6,9 +6,15 @@
       community.general.ufw:
         rule: allow
         name: OpenSSH
+    - name: Deny Censys IP addresses from accessing server
+      community.general.ufw:
+        rule: deny
+        src: '{{ item }}'
+        comment: 'Censys IP address'
+      loop: "{{ lookup('file', 'extra/ips/banned_ip_ranges_censys.txt').splitlines() }}"
     - name: Deny specific Chinese IP addresses from accessing server
       community.general.ufw:
         rule: deny
         src: '{{ item }}'
         comment: 'Chinese/Alibaba IP address'
-      loop: "{{ lookup('file', 'extra/banned_ip_ranges_cn.txt').splitlines() }}"
+      loop: "{{ lookup('file', 'extra/ips/banned_ip_ranges_cn.txt').splitlines() }}"

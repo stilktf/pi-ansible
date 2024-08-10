@@ -2,3 +2,32 @@
 ansible playbooks etc for my Raspberry Pi tiny server thing
 
 not *everything* has been turned into a playbook yet
+
+## Ansible vault
+
+This uses Ansible Vault. Create a file called *.vault_pass*, and put in the vaults password in the file. Then, you can run playbooks that require vault variables fine.
+
+### Encrypt a string
+
+If you'd like to add another variable to the vault, this is how:
+
+Let's say you want to encrypt the string "mynicepassword" and use "very_secret_password" as its variable. Not that difficult:
+
+``ansible-vault encrypt_string 'mynicepassword' --name 'verysecretpassword'``
+
+The command gives you a decently long output, which looks something like this:
+
+```
+very_secret_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          xxxxxxxxxx
+          xxxxxxxxx
+```
+
+To add it to the vault, open the vault editor, and paste in the output:
+
+``ansible-vault edit vault.yml``

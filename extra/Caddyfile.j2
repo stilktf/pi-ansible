@@ -1,0 +1,88 @@
+(defense) {
+	@noscrape header_regexp User-Agent Bytespider*|CensysInspect*|InternetMeasurement*
+	handle @noscrape {
+		abort
+	}
+}
+
+(common) {
+	import defense
+	tls {
+		dns cloudflare {{ cloudflare_dns_token }}
+	}
+}
+
+:80 {
+	import defense
+	respond 404
+	header Server "From Mars to Sirius"
+	log {
+		output file /var/log/caddy/ip-access.log
+	}
+}
+
+:81 {
+	root * /home/{{ pi_username }}/caddy_errorpage
+	reverse_proxy :1231
+	try_files {path}.html
+	handle_errors {
+		rewrite * /error.html
+		templates
+		try_files {path}.html
+		file_server
+	}
+}
+
+cat.stilk.tf {
+	import common
+	root * /home/{{ pi_username }}/cat_game
+	file_server {
+		index something.x86_64.html
+	}
+	header {
+		Cross-Origin-Opener-Policy "same-origin"
+		Cross-Origin-Embedder-Policy "require-corp"
+	}
+	try_files {path}.html
+}
+
+nitro.brunost.win {
+	root * /var/www/nitro_generator/public
+	encode zstd gzip
+	file_server
+
+	php_fastcgi unix//run/php/php8.3-fpm.sock {
+		resolve_root_symlink
+	}
+
+	@phpFile {
+		path *.php*
+	}
+	error @phpFile "Not found" 404
+}
+
+statenswikibidrag.stilk.tf {
+	import common
+	root * /var/www/statenswikibidrag-sf/public
+	encode zstd gzip
+	file_server
+
+	php_fastcgi unix//run/php/php8.3-fpm.sock {
+		env APP_ENV "prod"
+		resolve_root_symlink
+	}
+	@phpFile {
+		path *.php*
+	}
+	error @phpFile "Not found" 404
+}
+
+book.stilk.tf {
+	import common
+	reverse_proxy :8083
+}
+
+foot.stilk.tf {
+	import common
+	reverse_proxy :8696
+}
