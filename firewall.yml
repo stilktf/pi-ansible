@@ -1,3 +1,4 @@
+---
 - name: Firewall configuration using ufw
   hosts: myhosts
   become: true # Use this to specify you want to be root during the playbook!!!!
@@ -9,12 +10,12 @@
     - name: Deny Censys IP addresses from accessing server
       community.general.ufw:
         rule: deny
-        src: '{{ item }}'
-        comment: 'Censys IP address'
+        src: "{{ item }}"
+        comment: Censys IP address
       loop: "{{ lookup('file', 'extra/ips/banned_ip_ranges_censys.txt').splitlines() }}"
     - name: Deny specific Chinese IP addresses from accessing server
       community.general.ufw:
         rule: deny
-        src: '{{ item }}'
-        comment: 'Chinese/Alibaba IP address'
+        src: "{{ item }}"
+        comment: Chinese/Alibaba IP address
       loop: "{{ lookup('file', 'extra/ips/banned_ip_ranges_cn.txt').splitlines() }}"

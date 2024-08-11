@@ -1,9 +1,10 @@
+---
 - name: Update system
   hosts: myhosts
   become: true
   tasks:
     - name: Update repos and cache
-      ansible.builtin.apt: 
+      ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 3600
     - name: Upgrade apt packages
@@ -12,9 +13,10 @@
         name: "*"
     - name: Check if reboot is required
       register: reboot_required_file
-      stat: path=/var/run/reboot-required get_checksum=false
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+        get_checksum: "false"
     - name: Remind user if reboot is required
       ansible.builtin.debug:
         msg: Reboot might be required for update (kernel, etc)
       when: reboot_required_file.stat.exists
-

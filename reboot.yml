@@ -1,3 +1,4 @@
+---
 - name: Reboot systems
   hosts: myhosts
   become: true
@@ -5,6 +6,6 @@
   tasks:
     - name: Remind user
       ansible.builtin.pause:
-        prompt: "This will reboot every system in myhosts. Press Ctrl + C if you don't want to"
+        prompt: This will reboot every system in myhosts. Press Ctrl + C if you don't want to
     - name: Reboot hosts
       ansible.builtin.reboot:

@@ -1,3 +1,4 @@
+---
 - name: Setup Calibre server using Docker
   hosts: myhosts
   become: true
@@ -20,13 +21,12 @@
           - /mnt/synology/Calibre Library:/books # get books from nas
         restart_policy: unless-stopped
         ports:
-          - "8083:8083"
+          - 8083:8083
         env:
-          TZ: "Europe/Oslo"
+          TZ: Europe/Oslo
           PUID: "1000"
           PGID: "1000"
     - name: Check if NAS mount exists
-      stat:
+      ansible.builtin.stat:
         path: /mnt/synology
       register: nas_mount
-          
