@@ -31,3 +31,11 @@ very_secret_password: !vault |
 To add it to the vault, open the vault editor, and paste in the output:
 
 ``ansible-vault edit vault.yml``
+
+## What's next?
+
+Things I want to do:
+
+    - [ ] Figure out what Ansible roles are, and use them
+    - [ ] Run ansible-lint via GitHub Actions
+    - [ ] Change folder structure
