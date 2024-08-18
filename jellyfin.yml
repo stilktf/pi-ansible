@@ -1,0 +1,33 @@
+---
+- name: Setup Jellyfin server using Docker
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+  tasks:
+    - name: Install prerequisite Python packages for the Ansible module for Docker
+      ansible.builtin.apt:
+        name: python3-requests
+    - name: Check if Docker is installed on system
+      ansible.builtin.command: docker --version
+      register: docker_valid
+      changed_when: docker_valid.rc != 0
+    - name: Setup Jellyfin container
+      community.docker.docker_container:
+        name: jellyfin
+        image: jellyfin/jellyfin
+        volumes:
+          - /opt/jellyfin/config/:/config
+          - /opt/jellyfin/cache:/cache
+        restart_policy: unless-stopped
+        mounts:
+          - source: /opt/jellyfin/media
+            target: /media
+            type: bind
+          - source: /opt/jellyfin/movies
+            target: /movies
+            type: bind
+        ports:
+          - 8087:8096
+        env:
+          JELLYFIN_PublishedServerUrl: https://zel.stilk.tf 

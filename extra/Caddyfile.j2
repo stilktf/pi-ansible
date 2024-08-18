@@ -79,10 +79,15 @@ statenswikibidrag.stilk.tf {
 
 book.stilk.tf {
 	import common
-	reverse_proxy :8083
+	reverse_proxy :8083 # Calibre-web
 }
 
 foot.stilk.tf {
 	import common
-	reverse_proxy :8696
+	reverse_proxy :8696 # Old school project
+}
+
+zel.stilk.tf {
+	import common
+	reverse_proxy :8087 # Jellyfin
 }
