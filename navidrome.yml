@@ -1,5 +1,5 @@
 ---
-- name: Setup Jellyfin server using Docker
+- name: Setup Navidrome server using Docker
   hosts: myhosts
   become: true
   vars_files:
@@ -12,22 +12,16 @@
       ansible.builtin.command: docker --version
       register: docker_valid
       changed_when: docker_valid.rc != 0
-    - name: Setup Jellyfin container
+    - name: Setup Navidrome container
       community.docker.docker_container:
-        name: jellyfin
-        image: jellyfin/jellyfin
+        name: navidrome
+        image: deluan/navidrome
         volumes:
-          - /opt/jellyfin/config/:/config
-          - /opt/jellyfin/cache:/cache
+          - /opt/navidrome/data:/data
+          - /opt/navidrome/music:/music:ro
         restart_policy: unless-stopped
-        mounts:
-          - source: /opt/jellyfin/media
-            target: /media
-            type: bind
-          - source: /opt/jellyfin/movies
-            target: /movies
-            type: bind
+        user: 1000:1000
         ports:
-          - 8087:8096
+          - 4533:4533
         env:
-          JELLYFIN_PublishedServerUrl: https://zel.stilk.tf 
+          ND_BASEURL: https://zel.stilk.tf 
