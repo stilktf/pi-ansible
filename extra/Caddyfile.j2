@@ -89,5 +89,17 @@ foot.stilk.tf {
 
 zel.stilk.tf {
 	import common
-	reverse_proxy :8087 # Jellyfin
+	reverse_proxy :4533 # Navidrome
+}
+
+pw.stilk.tf {
+	import common
+	reverse_proxy :8099 # Vaultwarden
+}
+
+tiles.stilk.tf {
+	import common
+	root * /var/www/tiles
+	encode zstd gzip
+	file_server browse
 }

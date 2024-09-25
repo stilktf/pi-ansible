@@ -1,0 +1,21 @@
+---
+- name: Setup Vaultwarden server using Docker
+  hosts: myhosts
+  become: true
+  tasks:
+    - name: Install prerequisite Python packages for the Ansible module for Docker
+      ansible.builtin.apt:
+        name: python3-requests
+    - name: Check if Docker is installed on the system
+      ansible.builtin.command: docker --version
+      register: docker_valid
+      changed_when: docker_valid.rc != 0
+    - name: Setup Vaultwarden container
+      community.docker.docker_container:
+        name: vaultwarden
+        image: vaultwarden/server:latest
+        restart_policy: unless-stopped
+        volumes:
+          - /opt/vaultwarden/data:/data/
+        ports:
+          - "8099:80"
