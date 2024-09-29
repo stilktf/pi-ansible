@@ -14,11 +14,12 @@
       changed_when: docker_valid.rc != 0
     - name: Setup Calibre container
       community.docker.docker_container:
-        name: calibre
-        image: lscr.io/linuxserver/calibre-web
+        name: calibre-web-automated
+        image: driftywinds/cwa:latest
         volumes:
-          - /opt/calibre-web/data/:/config
-          - /mnt/synology/Calibre Library:/books # get books from nas
+          - /opt/calibre-web-automated/config/:/config
+          - /opt/calibre-web-automated/book-ingest:/cwa-book-ingest
+          - /mnt/synology/Calibre Library:/calibre-library # get books from nas
         restart_policy: unless-stopped
         ports:
           - 8083:8083
@@ -26,6 +27,7 @@
           TZ: Europe/Oslo
           PUID: "1000"
           PGID: "1000"
+          DOCKER_MODS: "lscr.io/linuxserver/mods:universal-calibre-v7.16.0"
     - name: Check if NAS mount exists
       ansible.builtin.stat:
         path: /mnt/synology
