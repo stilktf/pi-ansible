@@ -30,4 +30,6 @@ jobs:
           ansible-galaxy install -r roles/requirements.yml -p roles/galaxy
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@main
+        shell: bash
+        run: |
+          ansible-lint
