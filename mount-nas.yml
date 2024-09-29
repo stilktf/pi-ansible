@@ -11,6 +11,7 @@
     - name: Create credentials file for mount
       ansible.builtin.copy:
         dest: /etc/smbmount
+        mode: "0644"
         content: |
           username={{ smb_username }}
           password={{ smb_password }}
