@@ -2,3 +2,4 @@ exclude_paths:
   - .github/
   - .config/
   - roles/galaxy/
+  - roles/requirements.yml
