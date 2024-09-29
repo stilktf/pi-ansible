@@ -32,17 +32,17 @@
           start:
             title: Started backing up of Vaultwarden
             message: Next message will tell you if anything went wrong or if everything went OK.
-            tags: borgmatic
+            tags: borgmatic,timer_clock
             priority: min
           finish:
             title: Backing up Vaultwarden was successful
             message: Updated backup should be on the NAS.
-            tags: borgmatic,+1
+            tags: borgmatic,white_check_mark,+1
             priority: min
           fail:
             title: Backing up Vaultwarden failed
             message: Something went wrong while backing up Vaultwarden. Please check ASAP!
-            tags: borgmatic,+1,skull
+            tags: borgmatic,x,skull
             priority: max
           states:
             - start
