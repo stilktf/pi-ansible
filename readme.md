@@ -1,7 +1,9 @@
 # Pi Ansible
-ansible playbooks etc for my Raspberry Pi tiny server thing
+[![ansible-lint](https://github.com/stilktf/pi-ansible/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/stilktf/pi-ansible/actions/workflows/ansible-lint.yml)
 
-not *everything* has been turned into a playbook yet
+Ansible playbooks and more for the Raspberry Pi I use as a small homeserver (a horrible decision).
+
+More and more tasks will be able to be done via Ansible as time goes on, and anything new *will* be done via Ansible.
 
 ## Roles
 This project uses roles from Ansible Galaxy. To install the required roles, please run the following command:
@@ -46,3 +48,4 @@ Things I want to do:
 - [ ] Figure out what Ansible roles are, and use them
 - [x] Run ansible-lint via GitHub Actions
 - [ ] Change folder structure
+- [ ] Build Caddy server with its modules and more via Ansible
