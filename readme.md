@@ -3,6 +3,15 @@ ansible playbooks etc for my Raspberry Pi tiny server thing
 
 not *everything* has been turned into a playbook yet
 
+## Roles
+This project uses roles from Ansible Galaxy. To install the required roles, please run the following command:
+
+```
+ansible-galaxy install -r roles/requirements.yml -p roles/galaxy
+```
+
+``roles/galaxy`` is in ``.gitignore``, so it won't be commited to version control.
+
 ## Ansible vault
 
 This uses Ansible Vault. Create a file called *.vault_pass*, and put in the vaults password in the file. Then, you can run playbooks that require some variable from the Vault without being nagged about the vault's password each time.

@@ -5,7 +5,9 @@ jobs:
     name: Ansible Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
       - name: Create vault_pass file
         env: 
           VAULT_PASS: ${{ secrets.VAULT_PASSWORD }}
@@ -13,5 +15,17 @@ jobs:
           touch .vault_pass
           echo $VAULT_PASS >> .vault_pass
         shell: bash
+
+      - name: Install Ansible 
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Install roles from Galaxy
+        shell: bash
+        run : |
+          ansible-galaxy install -r roles/requirements.yml -p roles/galaxy
+
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
