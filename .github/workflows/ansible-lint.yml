@@ -28,6 +28,11 @@ jobs:
         shell: bash
         run : |
           ansible-galaxy install -r roles/requirements.yml -p roles/galaxy
+      
+      - name: Install collections from Galaxy
+        shell: bash 
+        run: |
+          ansible-galaxy install community.docker ansible.posix community.general --force
 
       - name: Run ansible-lint
         shell: bash
