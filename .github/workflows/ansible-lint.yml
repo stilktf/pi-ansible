@@ -16,11 +16,13 @@ jobs:
           echo $VAULT_PASS >> .vault_pass
         shell: bash
 
-      - name: Install Ansible 
+      - name: Install Pipx
         shell: bash
         run: |
           sudo apt update
-          sudo apt install -y ansible
+          sudo apt install -y pipx
+          sudo pipx ensurepath --global
+          sudo pipx install --include-deps ansible
 
       - name: Install roles from Galaxy
         shell: bash
