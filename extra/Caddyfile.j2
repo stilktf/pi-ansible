@@ -97,6 +97,11 @@ pw.stilk.tf {
 	reverse_proxy :8099 # Vaultwarden
 }
 
+push.stilk.tf {
+	import common
+	reverse_proxy :8098 # ntfy
+}
+
 tiles.stilk.tf {
 	import common
 	root * /var/www/tiles

@@ -1,0 +1,55 @@
+---
+- name: Set up Borg backup for Vaultwarden
+  hosts: myhosts
+  become: true
+
+  vars_files:
+    - vault.yml
+
+  pre_tasks:
+    - name: Install sqlite3 because it is necessary for the backup
+      ansible.builtin.apt:
+        name: sqlite3
+
+  roles:
+    - role: borgbase.ansible_role_borgbackup
+      borg_encryption_passphrase: "{{ borg_backup_passphrase_vw }}"
+      borg_repository:
+        - /mnt/synology/backups/vw.borg
+      borg_source_directories:
+        - /opt/vaultwarden/data
+      borgmatic_hooks:
+        before_backup:
+          - sqlite3 /opt/vaultwarden/data/db.sqlite3 ".backup '/opt/vaultwarden/data/backup-db.sqlite3'"
+        after_backup:
+          - rm -rf /opt/vaultwarden/data/backup-db.sqlite3
+        ntfy:
+          topic: backups
+          server: https://push.stilk.tf
+          username: user
+          password: "{{ ntfy_password }}"
+
+          start:
+            title: Started backing up of Vaultwarden
+            message: Next message will tell you if anything went wrong or if everything went OK.
+            tags: borgmatic
+            priority: min
+          finish:
+            title: Backing up Vaultwarden was successful
+            message: Updated backup should be on the NAS.
+            tags: borgmatic,+1
+            priority: min
+          fail:
+            title: Backing up Vaultwarden failed
+            message: Something went wrong while backing up Vaultwarden. Please check ASAP!
+            tags: borgmatic,+1,skull
+            priority: max
+          states:
+            - start
+            - finish
+            - fail
+      borg_retention_policy:
+        keep_daily: 7
+        keep_weekly: 4
+        keep_monthly: 6
+      borgmatic_timer: systemd

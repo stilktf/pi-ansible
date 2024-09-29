@@ -1,0 +1,24 @@
+---
+- name: Set up Ntfy
+  hosts: myhosts
+  become: true
+
+  tasks:
+    - name: Setup Ntfy container
+      community.docker.docker_container:
+        name: ntfy
+        image: binwiederhier/ntfy
+        restart_policy: unless-stopped
+        command: serve
+        volumes:
+          - /opt/ntfy/cache:/var/cache/ntfy
+          - /opt/ntfy/config:/etc/ntfy
+        ports:
+          - "8098:80"
+    - name: Copy config file over
+      ansible.builtin.template:
+        src: extra/ntfy.yml.j2
+        dest: /opt/ntfy/config/server.yml
+        owner: root
+        group: root
+        mode: "0644"
