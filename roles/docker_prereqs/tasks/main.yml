@@ -1,0 +1,7 @@
+- name: Install prerequisite Python packages for the Ansible module for Docker
+  ansible.builtin.apt:
+    name: python3-requests
+- name: Check if Docker is installed on system
+  ansible.builtin.command: docker --version
+  register: docker_valid
+  changed_when: docker_valid.rc != 0

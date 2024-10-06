@@ -1,0 +1,34 @@
+totp:
+    issuer: 'push.stilk.tf'
+identity_validation:
+    reset_password:
+        jwt_secret: '{{ authelia_jwt_secret }}'
+authentication_backend:
+    refresh_interval: '5m'
+    password_reset:
+        disable: false
+    file:
+        path: '/config/users_database.yml'
+session:
+    secret: '{{ authelia_session_secret }}'
+    name: 'authelia_session'
+    same_site: 'lax'
+    inactivity: '5m'
+    expiration: '1h'
+    remember_me: '1M'
+    cookies:
+        - domain: 'stilk.tf'
+          authelia_url: 'https://auth.stilk.tf'
+          remember_me: '1d'
+notifier:
+    filesystem:
+        filename: '/config/notification.txt'
+storage:
+    encryption_key: '{{ authelia_storage_secret }}'
+    local:
+        path: '/config/db.sqlite3'
+access_control:
+    default_policy: deny
+    rules:
+        - domain: "*.stilk.tf"
+          policy: two_factor

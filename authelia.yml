@@ -1,0 +1,38 @@
+---
+- name: Setup Authelia using Docker
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    - name: Do prereqs
+      ansible.builtin.include_role:
+        name: docker_prereqs
+
+    - name: Copy config file for Authelia
+      ansible.builtin.template:
+        src: extra/authelia.yml.j2
+        dest: /opt/authelia/config/configuration.yml
+        mode: "0644"
+
+    - name: Copy user config file for Authelia
+      ansible.builtin.template:
+        src: extra/authelia_users.yml.j2
+        dest: /opt/authelia/config/users_database.yml
+        mode: "0644"
+
+    - name: Copy Compose file over
+      ansible.builtin.template:
+        src: compose/authelia/compose.yml.j2
+        dest: /opt/authelia/compose.yml
+        mode: "0644"
+
+    - name: Start Authelia from compose
+      community.docker.docker_compose_v2:
+        project_src: /opt/authelia/
+      register: output
+
+    - name: Show results of compose
+      ansible.builtin.debug:
+        var: output

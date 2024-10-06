@@ -1,0 +1,10 @@
+---
+services:
+  authelia:
+    container_name: 'authelia'
+    image: 'docker.io/authelia/authelia:latest'
+    restart: 'unless-stopped'
+    ports:
+      - 9091:9091
+    volumes:
+      - '/opt/authelia/config:/config'

@@ -102,6 +102,11 @@ push.stilk.tf {
 	reverse_proxy :8098 # ntfy
 }
 
+auth.stilk.tf {
+	import common
+	reverse_proxy :9091 # Authelia
+}
+
 tiles.stilk.tf {
 	import common
 	root * /var/www/tiles
