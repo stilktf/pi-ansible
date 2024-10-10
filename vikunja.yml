@@ -1,0 +1,28 @@
+---
+- name: Setup Vikunja
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    - name: Do prereqs
+      ansible.builtin.include_role:
+        name: docker_prereqs
+
+    - name: Copy Config file over
+      ansible.builtin.template:
+        src: extra/vikunja.yml.j2
+        dest: /opt/vikunja/data/config.yml
+        mode: "0644"
+
+    - name: Setup Vikunja container
+      community.docker.docker_container:
+        name: vikunja
+        image: vikunja/vikunja
+        volumes:
+          - "/opt/vikunja/data/files:/app/vikunja/files"
+          - "/opt/vikunja/data/db:/db"
+          - "/opt/vikunja/data/config.yml:/app/vikunja/config.yml:ro"
+        ports:
+          - 3456:3456

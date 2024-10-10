@@ -107,6 +107,11 @@ auth.stilk.tf {
 	reverse_proxy :9091 # Authelia
 }
 
+todo.stilk.tf {
+	import common
+	reverse_proxy :3456 # Vikunja
+}
+
 tiles.stilk.tf {
 	import common
 	root * /var/www/tiles

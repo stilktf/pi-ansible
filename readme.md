@@ -43,6 +43,15 @@ To add it to the vault, open the vault editor, and paste in the output:
 
 ``ansible-vault edit vault.yml``
 
+## Services
+Not in any particular order, this is what this project configures:
+- Authelia
+- Vaultwarden
+- Caddy server
+- Navidrome
+- Ntfy
+- Calibre Web Automated
+
 ## What's next?
 Things I want to do:
 - [ ] Figure out what Ansible roles are, and use them

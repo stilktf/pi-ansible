@@ -1,0 +1,12 @@
+auth:
+  local:
+    enabled: false
+  openid:
+    enabled: true
+    redirecturl: 'https://todo.stilk.tf/auth/openid/'
+    providers:
+      - name: 'Authelia'
+        authurl: 'https://auth.stilk.tf'
+        clientid: 'vikunja'
+        clientsecret: '{{ authelia_client_secret_vikunja }}'
+        scope: 'openid profile email'

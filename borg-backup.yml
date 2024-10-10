@@ -13,12 +13,12 @@
 
   roles:
     - role: borgbase.ansible_role_borgbackup
-      ansible_role_borgbackup_borg_encryption_passphrase: "{{ borg_backup_passphrase_vw }}"
-      borg_repository: # noqa var-naming[no-role-prefix]
+      borg_encryption_passphrase: '{{ borg_backup_passphrase_vw }}'
+      borg_repository:
         - /mnt/synology/backups/vw.borg
-      ansible_role_borgbackup_borg_source_directories:
+      borg_source_directories:
         - /opt/vaultwarden/data
-      ansible_role_borgbackup_borgmatic_hooks:
+      borgmatic_hooks:
         before_backup:
           - sqlite3 /opt/vaultwarden/data/db.sqlite3 ".backup '/opt/vaultwarden/data/backup-db.sqlite3'"
         after_backup:
@@ -48,8 +48,8 @@
             - start
             - finish
             - fail
-      ansible_role_borgbackup_borg_retention_policy:
+      borg_retention_policy:
         keep_daily: 7
         keep_weekly: 4
         keep_monthly: 6
-      ansible_role_borgbackup_borgmatic_timer: cron
+      borgmatic_timer: cron
