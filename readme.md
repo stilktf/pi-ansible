@@ -14,6 +14,12 @@ ansible-galaxy install -r roles/requirements.yml -p roles/galaxy
 
 ``roles/galaxy`` is in ``.gitignore``, so it won't be commited to version control.
 
+If you wish to update roles, the following command works fine:
+
+```
+ansible-galaxy install -r roles/requirements.yml -p roles/galaxy --force
+```
+
 ## Ansible vault
 
 This uses Ansible Vault. Create a file called *.vault_pass*, and put in the vaults password in the file. Then, you can run playbooks that require some variable from the Vault without being nagged about the vault's password each time.

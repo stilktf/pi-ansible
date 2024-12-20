@@ -3,3 +3,4 @@ myhosts:
   hosts:
     pi_01:
       ansible_host: 192.168.86.69 # This is my IP address for my Pi, lol
+      ansible_user: ansible-runner

@@ -1,0 +1,13 @@
+---
+- name: Setup Bluesky PDS
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+  roles:
+    - role: stilktf.ansible_bluesky_pds
+      bluesky_pds_port: 8492
+      bluesky_pds_hostname: "{{ bluesky_hostname  }}"
+      bluesky_pds_admin_password: "{{ bluesky_admin_password }}"
+      bluesky_pds_secret: "{{ bluesky_secret }}"
+      bluesky_pds_plc_rotation_key: "{{ bluesky_plc_rotation_key }}"

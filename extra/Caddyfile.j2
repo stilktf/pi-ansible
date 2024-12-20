@@ -112,6 +112,28 @@ todo.stilk.tf {
 	reverse_proxy :3456 # Vikunja
 }
 
+red.stilk.tf {
+        import common
+        reverse_proxy :8054 # redlib
+}
+
+sheet.stilk.tf {
+        import common
+
+        forward_auth :9091 {
+                uri /api/authz/forward-auth
+
+                copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+        }
+
+        reverse_proxy :8484 # Grist
+}
+
+brunost.win, *.brunost.win {
+	import common
+	reverse_proxy :8492 # bsky
+}
+
 tiles.stilk.tf {
 	import common
 	root * /var/www/tiles
