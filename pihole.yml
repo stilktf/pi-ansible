@@ -1,0 +1,32 @@
+---
+- name: Set up Pi-Hole
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    - name: Do prereqs
+      ansible.builtin.include_role:
+        name: docker_prereqs
+
+    - name: Ensure Pi-hole folder exists
+      ansible.builtin.file:
+        path: /opt/pihole
+        state: directory
+        mode: "0644"
+
+    - name: Copy Compose file over
+      ansible.builtin.template:
+        src: compose/pihole/compose.yml.j2
+        dest: /opt/pihole/compose.yml
+        mode: "0644"
+
+    - name: Start Pi-hole from compose
+      community.docker.docker_compose_v2:
+        project_src: /opt/pihole/
+      register: output
+
+    - name: Show results of compose
+      ansible.builtin.debug:
+        var: output
