@@ -1,0 +1,8 @@
+---
+- name: Setup kosync
+  hosts: myhosts
+  become: true
+  roles:
+    - role: stilktf.koreader-sync
+      server_port: 8497
+      build_image: true

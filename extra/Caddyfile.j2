@@ -134,6 +134,15 @@ brunost.win, *.brunost.win {
 	reverse_proxy :8492 # bsky
 }
 
+readersync.stilk.tf {
+	import common
+	reverse_proxy :8497 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	} # kosync
+}
+
 tiles.stilk.tf {
 	import common
 	root * /var/www/tiles
