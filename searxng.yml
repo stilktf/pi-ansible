@@ -1,0 +1,29 @@
+---
+- name: Set up SearXNG
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    - name: Do prereqs
+      ansible.builtin.include_role:
+        name: docker_prereqs
+
+    - name: Ensure SearXNG folder exists
+      ansible.builtin.file:
+        path: /opt/searxng
+        state: directory
+        mode: "0755"
+
+    - name: Setup SearXNG container
+      community.docker.docker_container:
+        name: searxng
+        image: searxng/searxng
+        volumes:
+          - "/opt/searxng/:/etc/searxng"
+        env:
+          BASE_URL: https://search.stilk.tf
+          INSTANCE_NAME: Stilk's SearXNG
+        ports:
+          - "6492:8080"

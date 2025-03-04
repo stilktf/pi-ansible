@@ -10,6 +10,11 @@ authentication_backend:
         disable: false
     file:
         path: '/config/users_database.yml'
+server:
+    endpoints:
+        authz:
+            forward-auth:
+                implementation: 'ForwardAuth'
 session:
     secret: '{{ authelia_session_secret }}'
     name: 'authelia_session'
@@ -67,3 +72,35 @@ identity_providers:
                     {{
                         authelia_jwks_rs_public_key | indent(20)
                     }}
+            - client_id: 'grist'
+              client_name: 'Grist'
+              client_secret: '{{ authelia_client_secret_grist }}'
+              public: false
+              authorization_policy: 'two_factor'
+              redirect_uris:
+                - "https://sheet.stilk.tf/oauth2/callback"
+              scopes:
+                - 'openid'
+                - 'profile'
+                - 'email'
+              userinfo_signed_response_alg: 'RS256'
+              token_endpoint_auth_method: 'client_secret_basic'
+              jwks:
+                - key_id: 'main'
+                  key: |
+                    {{
+                        authelia_jwks_rs_public_key | indent(20)
+                    }}
+            - client_name: 'Memos'
+              client_id: '{{ authelia_client_id_memos }}'
+              client_secret: '{{ authelia_client_secret_memos }}'
+              public: false
+              authorization_policy: 'two_factor'
+              pre_configured_consent_duration: 4w
+              redirect_uris:
+                - 'https://notes.stilk.tf/auth/callback'
+              scopes:
+                - 'openid'
+                - 'profile'
+                - 'email'
+              token_endpoint_auth_method: 'client_secret_post'

@@ -1,0 +1,32 @@
+---
+- name: Set up Memos
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    - name: Do prereqs
+      ansible.builtin.include_role:
+        name: docker_prereqs
+
+    - name: Ensure Memos folder exists
+      ansible.builtin.file:
+        path: /opt/memos
+        state: directory
+        mode: "0755"
+
+    - name: Copy Compose file over
+      ansible.builtin.template:
+        src: compose/memos/compose.yml.j2
+        dest: /opt/memos/compose.yml
+        mode: "0644"
+
+    - name: Start Memos from compose
+      community.docker.docker_compose_v2:
+        project_src: /opt/memos
+      register: output
+
+    - name: Show results of compose
+      ansible.builtin.debug:
+        var: output

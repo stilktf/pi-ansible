@@ -1,0 +1,32 @@
+---
+- name: Set up Joplin Server
+  hosts: myhosts
+  become: true
+  vars_files:
+    - vault.yml
+
+  tasks:
+    - name: Do prereqs
+      ansible.builtin.include_role:
+        name: docker_prereqs
+
+    - name: Ensure Joplin Server folder exists
+      ansible.builtin.file:
+        path: /opt/joplin-server
+        state: directory
+        mode: "0755"
+
+    - name: Copy Compose file over
+      ansible.builtin.template:
+        src: compose/joplin-server/compose.yml.j2
+        dest: /opt/joplin-server/compose.yml
+        mode: "0644"
+
+    - name: Start Joplin server from compose
+      community.docker.docker_compose_v2:
+        project_src: /opt/joplin-server
+      register: output
+
+    - name: Show results of compose
+      ansible.builtin.debug:
+        var: output

@@ -143,6 +143,16 @@ readersync.stilk.tf {
 	} # kosync
 }
 
+search.stilk.tf {
+	import common
+	reverse_proxy :6492 # SearXNG
+}
+
+notes.stilk.tf {
+	import common
+	reverse_proxy :22300 # Joplin server
+}
+
 tiles.stilk.tf {
 	import common
 	root * /var/www/tiles
